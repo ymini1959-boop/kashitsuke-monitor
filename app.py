@@ -23,19 +23,20 @@ PLOTLY_LAYOUT = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
     font=dict(family="Noto Sans JP, -apple-system, sans-serif", color=C_NAVY, size=13),
-    margin=dict(l=8, r=8, t=12, b=8),
+    margin=dict(l=8, r=8, t=8, b=48),
     hovermode="x unified",
     showlegend=True,
+    title=dict(text=""),
     legend=dict(
         orientation="h",
         yanchor="top",
-        y=-0.18,
+        y=-0.22,
         xanchor="left",
         x=0,
         font=dict(size=11),
         bgcolor="rgba(0,0,0,0)",
     ),
-    height=300,
+    height=310,
 )
 
 
@@ -273,58 +274,82 @@ header[data-testid="stHeader"] { background: transparent !important; }
   background: #fff;
   border: 1px solid rgba(15,23,42,0.06);
   border-radius: 14px;
-  padding: 0.55rem 0.55rem 0.25rem;
+  padding: 0.85rem 0.8rem 0.55rem;
   box-shadow: 0 6px 18px rgba(15,23,42,0.04);
   margin-bottom: 0.65rem;
-  overflow: hidden;
+  overflow: visible;
 }
 .chart-caption {
-  font-size: 0.88rem !important;
+  font-size: 0.92rem !important;
   font-weight: 700 !important;
   color: #0f172a !important;
-  margin: 0.1rem 0 0.35rem 0 !important;
-  line-height: 1.3 !important;
+  margin: 0 0 0.2rem 0 !important;
+  line-height: 1.35 !important;
 }
 .chart-note {
-  font-size: 0.75rem !important;
+  font-size: 0.76rem !important;
   color: #64748b !important;
-  margin: 0 0 0.45rem 0 !important;
+  margin: 0 0 0.55rem 0 !important;
+  line-height: 1.4 !important;
 }
 
-/* タブ：セグメント風 */
+/* タブ：リッチなピル型セグメント */
+div[data-testid="stTabs"] {
+  margin-top: 0.15rem;
+}
 .stTabs [data-baseweb="tab-list"] {
-  gap: 0.25rem;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  gap: 0.3rem !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
   -webkit-overflow-scrolling: touch;
-  background: #e2e8f0;
-  border-radius: 14px;
-  padding: 0.28rem;
-  margin-bottom: 0.55rem;
+  background: linear-gradient(180deg, #0f172a 0%, #134e4a 100%) !important;
+  border-radius: 16px !important;
+  padding: 0.35rem !important;
+  margin-bottom: 0.7rem !important;
   scrollbar-width: none;
+  border: 1px solid rgba(15,118,110,0.25) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
 }
 .stTabs [data-baseweb="tab-list"]::-webkit-scrollbar { display: none; }
 .stTabs [data-baseweb="tab"] {
   background: transparent !important;
-  border-radius: 11px !important;
-  padding: 0.5rem 0.75rem !important;
+  border-radius: 12px !important;
+  padding: 0.65rem 0.9rem !important;
   border: none !important;
-  color: #475569 !important;
+  color: #cbd5e1 !important;
   font-weight: 600 !important;
-  font-size: 0.82rem !important;
-  min-height: 40px;
-  white-space: nowrap;
-  flex-shrink: 0;
+  font-size: 0.84rem !important;
+  line-height: 1.25 !important;
+  min-height: 44px !important;
+  height: auto !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+}
+.stTabs [data-baseweb="tab"] > div,
+.stTabs [data-baseweb="tab"] p,
+.stTabs [data-baseweb="tab"] span {
+  overflow: visible !important;
+  line-height: 1.25 !important;
+  margin: 0 !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
 }
 .stTabs [aria-selected="true"] {
-  background: #fff !important;
-  color: #0f766e !important;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12) !important;
+  background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(20, 184, 166, 0.45) !important;
   border: none !important;
 }
 .stTabs [data-baseweb="tab-highlight"],
-.stTabs [data-baseweb="tab-border"] {
+.stTabs [data-baseweb="tab-border"],
+.stTabs [data-baseweb="tab-border"] *,
+.stTabs hr {
   display: none !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 /* スマホ（iPhone幅）：縦積み・小さめタイトルを強制 */
@@ -367,17 +392,24 @@ def yen(n) -> str:
 
 
 def theme_chart(fig: go.Figure) -> go.Figure:
-    """凡例は下、タイトルは付けない（HTML側で表示して被り防止）。"""
-    fig.update_layout(**PLOTLY_LAYOUT, title=None)
+    """凡例は下。Plotlyタイトルは空文字にして undefined / 被りを防ぐ。"""
+    fig.update_layout(**PLOTLY_LAYOUT)
+    fig.update_layout(title=dict(text=""))
     fig.update_xaxes(gridcolor="rgba(15,23,42,0.05)", zeroline=False, showgrid=False)
     fig.update_yaxes(gridcolor="rgba(15,23,42,0.07)", zeroline=False, tickformat=",")
     return fig
 
 
 def chart_panel(title: str, note: str = "") -> None:
+    """チャート上の見出し（Plotlyタイトルは使わない）。"""
     note_html = f'<div class="chart-note">{note}</div>' if note else ""
     st.markdown(
-        f'<div class="panel"><div class="chart-caption">{title}</div>{note_html}',
+        f"""
+<div class="panel">
+  <div class="chart-caption">{title}</div>
+  {note_html}
+</div>
+        """,
         unsafe_allow_html=True,
     )
 
@@ -649,15 +681,16 @@ st.markdown(
     <p class="case-desc">遅延金を日割り計上し、遅延金→元本の順に充当</p>
     <div class="case-row"><span class="k">① 当初元本</span><span class="v">{yen(initial_principal)}</span></div>
     <div class="case-row"><span class="k">② 単純支払済み費用</span><span class="v">− {yen(total_pmt)}</span></div>
-    <div class="case-row"><span class="k">③ 遅延損害金（残）</span><span class="v">{yen(final_damage)}</span></div>
-    <div class="case-row"><span class="k">④ 未払い元本（残）</span><span class="v">{yen(final_principal)}</span></div>
-    <div class="case-row total"><span class="k">⑤ 一括精算額（③＋④）</span><span class="v">{yen(settlement)}</span></div>
+    <div class="case-row"><span class="k">③ 累計遅延損害金（発生総額）</span><span class="v">{yen(total_dmg_gen)}</span></div>
+    <div class="case-row"><span class="k">④ 遅延損害金（残）</span><span class="v">{yen(final_damage)}</span></div>
+    <div class="case-row"><span class="k">⑤ 未払い元本（残）</span><span class="v">{yen(final_principal)}</span></div>
+    <div class="case-row total"><span class="k">⑥ 一括精算額（④＋⑤）</span><span class="v">{yen(settlement)}</span></div>
   </div>
 </div>
 <div class="diff-note">
   両ケースの差：<strong>{yen(case_gap)}</strong><br>
-  単純残額 {yen(simple_remaining)} に対し、遅延損害金込みだと {yen(settlement)} です。
-  差の主な要因は遅延損害金（残） {yen(final_damage)} と、充当で元本減り方が変わることです。
+  単純残額 {yen(simple_remaining)} に対し、遅延損害金込みだと {yen(settlement)} です。<br>
+  累計で発生した遅延損害金は {yen(total_dmg_gen)}、うち未払い残が {yen(final_damage)}、すでに充当済みが {yen(total_dmg_paid)} です。
 </div>
     """,
     unsafe_allow_html=True,
@@ -702,7 +735,6 @@ with tab1:
     theme_chart(fig1)
     fig1.update_layout(yaxis_title="円", xaxis_title="")
     st.plotly_chart(fig1, use_container_width=True, config={"displayModeBar": False})
-    st.markdown("</div>", unsafe_allow_html=True)
 
 with tab2:
     chart_panel("予定累積 vs 実績入金", "点線が予定、実線が入金実績。差が返済の遅れ")
@@ -728,7 +760,6 @@ with tab2:
     theme_chart(fig2)
     fig2.update_layout(yaxis_title="円", xaxis_title="")
     st.plotly_chart(fig2, use_container_width=True, config={"displayModeBar": False})
-    st.markdown("</div>", unsafe_allow_html=True)
 
 with tab3:
     chart_panel("月次：入金と発生遅延金", "各月に入った金額と、同月に発生した遅延損害金")
@@ -743,7 +774,6 @@ with tab3:
     theme_chart(fig3)
     fig3.update_layout(barmode="group", yaxis_title="円", xaxis_title="", height=320)
     st.plotly_chart(fig3, use_container_width=True, config={"displayModeBar": False})
-    st.markdown("</div>", unsafe_allow_html=True)
 
 with tab4:
     chart_panel("入金の充当先", f"入金総額 {yen(total_pmt)} の内訳")
@@ -762,15 +792,15 @@ with tab4:
     theme_chart(fig4)
     fig4.update_layout(
         showlegend=True,
-        legend=dict(orientation="h", y=-0.05, x=0.5, xanchor="center"),
-        margin=dict(l=8, r=8, t=8, b=40),
+        legend=dict(orientation="h", y=-0.08, x=0.5, xanchor="center"),
+        margin=dict(l=8, r=8, t=8, b=48),
         height=300,
+        title=dict(text=""),
     )
     st.plotly_chart(fig4, use_container_width=True, config={"displayModeBar": False})
     col_a, col_b = st.columns(2)
     col_a.metric("元本へ充当", yen(total_prc_paid))
     col_b.metric("遅延金へ充当", yen(total_dmg_paid))
-    st.markdown("</div>", unsafe_allow_html=True)
 
 with tab5:
     st.caption("イベント発生日のみ（入金・月末確定・基準日）")
