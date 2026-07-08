@@ -22,12 +22,20 @@ C_GREEN = "#15803d"
 PLOTLY_LAYOUT = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="Noto Sans JP, -apple-system, sans-serif", color=C_NAVY, size=14),
-    margin=dict(l=4, r=4, t=40, b=4),
+    font=dict(family="Noto Sans JP, -apple-system, sans-serif", color=C_NAVY, size=13),
+    margin=dict(l=8, r=8, t=12, b=8),
     hovermode="x unified",
     showlegend=True,
-    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=12)),
-    height=280,
+    legend=dict(
+        orientation="h",
+        yanchor="top",
+        y=-0.18,
+        xanchor="left",
+        x=0,
+        font=dict(size=11),
+        bgcolor="rgba(0,0,0,0)",
+    ),
+    height=300,
 )
 
 
@@ -265,30 +273,58 @@ header[data-testid="stHeader"] { background: transparent !important; }
   background: #fff;
   border: 1px solid rgba(15,23,42,0.06);
   border-radius: 14px;
-  padding: 0.35rem 0.35rem 0.1rem;
+  padding: 0.55rem 0.55rem 0.25rem;
   box-shadow: 0 6px 18px rgba(15,23,42,0.04);
   margin-bottom: 0.65rem;
   overflow: hidden;
 }
-
-.stTabs [data-baseweb="tab-list"] {
-  gap: 0.3rem;
-  flex-wrap: wrap;
+.chart-caption {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0.1rem 0 0.35rem 0 !important;
+  line-height: 1.3 !important;
 }
+.chart-note {
+  font-size: 0.75rem !important;
+  color: #64748b !important;
+  margin: 0 0 0.45rem 0 !important;
+}
+
+/* タブ：セグメント風 */
+.stTabs [data-baseweb="tab-list"] {
+  gap: 0.25rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #e2e8f0;
+  border-radius: 14px;
+  padding: 0.28rem;
+  margin-bottom: 0.55rem;
+  scrollbar-width: none;
+}
+.stTabs [data-baseweb="tab-list"]::-webkit-scrollbar { display: none; }
 .stTabs [data-baseweb="tab"] {
-  background: #fff;
-  border-radius: 999px !important;
-  padding: 0.45rem 0.8rem !important;
-  border: 1px solid rgba(15,23,42,0.08);
-  color: #475569;
-  font-weight: 600;
-  font-size: 0.85rem !important;
+  background: transparent !important;
+  border-radius: 11px !important;
+  padding: 0.5rem 0.75rem !important;
+  border: none !important;
+  color: #475569 !important;
+  font-weight: 600 !important;
+  font-size: 0.82rem !important;
   min-height: 40px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .stTabs [aria-selected="true"] {
-  background: #0f766e !important;
-  color: #fff !important;
-  border-color: #0f766e !important;
+  background: #fff !important;
+  color: #0f766e !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12) !important;
+  border: none !important;
+}
+.stTabs [data-baseweb="tab-highlight"],
+.stTabs [data-baseweb="tab-border"] {
+  display: none !important;
 }
 
 /* スマホ（iPhone幅）：縦積み・小さめタイトルを強制 */
@@ -330,15 +366,20 @@ def yen(n) -> str:
     return f"{int(round(n)):,} 円"
 
 
-def theme_chart(fig: go.Figure, title: str = "") -> go.Figure:
-    fig.update_layout(
-        **PLOTLY_LAYOUT,
-        title=dict(text=title, font=dict(size=14, color=C_NAVY)) if title else None,
-    )
+def theme_chart(fig: go.Figure) -> go.Figure:
+    """凡例は下、タイトルは付けない（HTML側で表示して被り防止）。"""
+    fig.update_layout(**PLOTLY_LAYOUT, title=None)
     fig.update_xaxes(gridcolor="rgba(15,23,42,0.05)", zeroline=False, showgrid=False)
     fig.update_yaxes(gridcolor="rgba(15,23,42,0.07)", zeroline=False, tickformat=",")
     return fig
 
+
+def chart_panel(title: str, note: str = "") -> None:
+    note_html = f'<div class="chart-note">{note}</div>' if note else ""
+    st.markdown(
+        f'<div class="panel"><div class="chart-caption">{title}</div>{note_html}',
+        unsafe_allow_html=True,
+    )
 
 def get_edit_password() -> str:
     try:
@@ -606,36 +647,39 @@ st.markdown(
     <div class="case-label">CASE B</div>
     <div class="case-title">遅延損害金込み</div>
     <p class="case-desc">遅延金を日割り計上し、遅延金→元本の順に充当</p>
-    <div class="case-row"><span class="k">未払い元本</span><span class="v">{yen(final_principal)}</span></div>
-    <div class="case-row"><span class="k">未払い遅延損害金</span><span class="v">{yen(final_damage)}</span></div>
-    <div class="case-row"><span class="k">発生した遅延損害金（累計）</span><span class="v">{yen(total_dmg_gen)}</span></div>
-    <div class="case-row total"><span class="k">一括精算額</span><span class="v">{yen(settlement)}</span></div>
+    <div class="case-row"><span class="k">① 当初元本</span><span class="v">{yen(initial_principal)}</span></div>
+    <div class="case-row"><span class="k">② 単純支払済み費用</span><span class="v">− {yen(total_pmt)}</span></div>
+    <div class="case-row"><span class="k">③ 遅延損害金（残）</span><span class="v">{yen(final_damage)}</span></div>
+    <div class="case-row"><span class="k">④ 未払い元本（残）</span><span class="v">{yen(final_principal)}</span></div>
+    <div class="case-row total"><span class="k">⑤ 一括精算額（③＋④）</span><span class="v">{yen(settlement)}</span></div>
   </div>
 </div>
 <div class="diff-note">
   両ケースの差：<strong>{yen(case_gap)}</strong><br>
-  単純残額 {yen(simple_remaining)} に対し、遅延損害金込みだと {yen(settlement)} になります。
-  差は「遅延損害金の影響」です。
+  単純残額 {yen(simple_remaining)} に対し、遅延損害金込みだと {yen(settlement)} です。
+  差の主な要因は遅延損害金（残） {yen(final_damage)} と、充当で元本減り方が変わることです。
 </div>
     """,
     unsafe_allow_html=True,
 )
 
-# --- シンプルなグラフ（2タブ） ---
+# --- グラフ・明細 ---
 st.markdown(
     """
 <div class="section-head">
-  <div class="section-title">推移グラフ</div>
-  <span>残高と予定／実績</span>
+  <div class="section-title">分析グラフ</div>
+  <span>横にスワイプでタブ切替</span>
 </div>
     """,
     unsafe_allow_html=True,
 )
 
-tab1, tab2, tab3 = st.tabs(["残高の推移", "予定と実績", "計算明細"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(
+    ["残高", "予定と実績", "月次", "充当内訳", "明細"]
+)
 
 with tab1:
-    st.markdown('<div class="panel">', unsafe_allow_html=True)
+    chart_panel("未払い残高の推移", "元本残高と遅延損害金残高の時系列")
     fig1 = go.Figure()
     fig1.add_trace(
         go.Scatter(
@@ -655,13 +699,13 @@ with tab1:
             line=dict(color=C_ORANGE, width=2.5),
         )
     )
-    theme_chart(fig1, "未払い元本と遅延金")
+    theme_chart(fig1)
     fig1.update_layout(yaxis_title="円", xaxis_title="")
     st.plotly_chart(fig1, use_container_width=True, config={"displayModeBar": False})
     st.markdown("</div>", unsafe_allow_html=True)
 
 with tab2:
-    st.markdown('<div class="panel">', unsafe_allow_html=True)
+    chart_panel("予定累積 vs 実績入金", "点線が予定、実線が入金実績。差が返済の遅れ")
     fig2 = go.Figure()
     fig2.add_trace(
         go.Scatter(
@@ -681,12 +725,54 @@ with tab2:
             line=dict(color=C_GREEN, width=2.5),
         )
     )
-    theme_chart(fig2, "予定累積 vs 実績入金")
+    theme_chart(fig2)
     fig2.update_layout(yaxis_title="円", xaxis_title="")
     st.plotly_chart(fig2, use_container_width=True, config={"displayModeBar": False})
     st.markdown("</div>", unsafe_allow_html=True)
 
 with tab3:
+    chart_panel("月次：入金と発生遅延金", "各月に入った金額と、同月に発生した遅延損害金")
+    df_plot = df_daily.copy()
+    df_plot["年月"] = df_plot["date"].apply(lambda x: x.strftime("%Y/%m"))
+    df_monthly = df_plot.groupby("年月")[["発生遅延金", "入金額"]].sum().reset_index()
+    fig3 = go.Figure()
+    fig3.add_trace(go.Bar(x=df_monthly["年月"], y=df_monthly["入金額"], name="入金額", marker_color=C_TEAL))
+    fig3.add_trace(
+        go.Bar(x=df_monthly["年月"], y=df_monthly["発生遅延金"], name="発生遅延金", marker_color=C_ORANGE)
+    )
+    theme_chart(fig3)
+    fig3.update_layout(barmode="group", yaxis_title="円", xaxis_title="", height=320)
+    st.plotly_chart(fig3, use_container_width=True, config={"displayModeBar": False})
+    st.markdown("</div>", unsafe_allow_html=True)
+
+with tab4:
+    chart_panel("入金の充当先", f"入金総額 {yen(total_pmt)} の内訳")
+    fig4 = go.Figure(
+        data=[
+            go.Pie(
+                labels=["元本へ充当", "遅延金へ充当"],
+                values=[total_prc_paid, total_dmg_paid],
+                hole=0.55,
+                marker=dict(colors=[C_TEAL, C_ORANGE]),
+                textinfo="label+percent",
+                textfont=dict(size=12),
+            )
+        ]
+    )
+    theme_chart(fig4)
+    fig4.update_layout(
+        showlegend=True,
+        legend=dict(orientation="h", y=-0.05, x=0.5, xanchor="center"),
+        margin=dict(l=8, r=8, t=8, b=40),
+        height=300,
+    )
+    st.plotly_chart(fig4, use_container_width=True, config={"displayModeBar": False})
+    col_a, col_b = st.columns(2)
+    col_a.metric("元本へ充当", yen(total_prc_paid))
+    col_b.metric("遅延金へ充当", yen(total_dmg_paid))
+    st.markdown("</div>", unsafe_allow_html=True)
+
+with tab5:
     st.caption("イベント発生日のみ（入金・月末確定・基準日）")
     st.dataframe(
         df_history[
