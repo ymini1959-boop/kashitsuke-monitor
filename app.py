@@ -258,9 +258,9 @@ def theme_chart(fig: go.Figure, title: str = "") -> go.Figure:
 
 def get_edit_password() -> str:
     try:
-        return str(st.secrets.get("EDIT_PASSWORD", "kashitsuke2026"))
+        return str(st.secrets.get("EDIT_PASSWORD", "2640"))
     except Exception:
-        return "kashitsuke2026"
+        return "2640"
 
 
 inject_styles()
