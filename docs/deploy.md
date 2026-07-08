@@ -67,7 +67,8 @@ streamlit run app.py
 
 ## 注意事項
 
-- 入金 CSV / 計算基準日を含みます。リンク共有範囲に注意
+- 入金履歴の**編集・保存はパスワード保護**されています。閲覧は誰でも可能です
+- Streamlit Cloud の Secrets に `EDIT_PASSWORD = "任意のパスワード"` を設定してください（未設定時はローカル用デフォルト値）
 - Streamlit Cloud 上の「保存」はコンテナ再起動で消える可能性があります。恒久反映は `payments.csv` / `config.json` を更新して push してください
 - `requirements.txt` に全依存関係を記載する
 - Python 3.10 以上を推奨

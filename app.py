@@ -13,23 +13,19 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── カラー / チャート共通設定 ──
 C_TEAL = "#0f766e"
-C_TEAL_SOFT = "#99f6e4"
 C_NAVY = "#0f172a"
 C_SLATE = "#64748b"
 C_ORANGE = "#ea580c"
-C_RED = "#be123c"
 C_GREEN = "#15803d"
-C_BG = "#eef2f6"
-C_CARD = "#ffffff"
 
 PLOTLY_LAYOUT = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
     font=dict(family="Noto Sans JP, sans-serif", color=C_NAVY, size=13),
-    margin=dict(l=20, r=20, t=48, b=20),
+    margin=dict(l=8, r=8, t=36, b=8),
     hovermode="x unified",
+    showlegend=True,
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
 )
 
@@ -44,20 +40,16 @@ html, body, [class*="css"] {
   font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-
 .stApp {
   background:
-    radial-gradient(ellipse 70% 45% at 10% -10%, rgba(15,118,110,0.12) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 35% at 100% 0%, rgba(15,23,42,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 45% at 10% -10%, rgba(15,118,110,0.10) 0%, transparent 55%),
     linear-gradient(180deg, #e2e8f0 0%, #eef2f6 140px, #eef2f6 100%) !important;
 }
-
 #MainMenu, footer { visibility: hidden !important; }
-
 .block-container {
-  padding-top: 1.1rem !important;
-  padding-bottom: 2.5rem !important;
-  max-width: 1180px !important;
+  padding-top: 1rem !important;
+  padding-bottom: 2.2rem !important;
+  max-width: 1100px !important;
 }
 
 [data-testid="stSidebar"] {
@@ -73,157 +65,157 @@ html, body, [class*="css"] {
 }
 [data-testid="stSidebar"] [data-testid="stCaption"] { color: #94a3b8 !important; }
 
-div[data-testid="stMetric"] {
-  background: #fff;
-  border: 1px solid rgba(15,23,42,0.06);
-  border-radius: 16px;
-  padding: 0.95rem 0.95rem 0.8rem;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
-  min-height: 104px;
-}
-div[data-testid="stMetric"] label {
-  color: #64748b !important;
-  font-weight: 500 !important;
-  white-space: normal !important;
-  overflow: visible !important;
-  line-height: 1.35 !important;
-}
-div[data-testid="stMetric"] [data-testid="stMetricValue"] {
-  font-weight: 700 !important;
-  letter-spacing: -0.02em;
-  font-size: 1.35rem !important;
-  white-space: nowrap !important;
-  overflow: visible !important;
-  line-height: 1.25 !important;
-}
-
 .hero {
-  position: relative;
-  overflow: hidden;
   background: linear-gradient(135deg, #0f172a 0%, #134e4a 55%, #0f766e 100%);
   color: #fff;
-  border-radius: 22px;
-  padding: 1.45rem 1.4rem 1.35rem;
-  margin-bottom: 1.15rem;
-  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.22);
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -40%;
-  right: -8%;
-  width: 240px;
-  height: 240px;
-  background: radial-gradient(circle, rgba(45,212,191,0.35) 0%, transparent 65%);
-  pointer-events: none;
+  border-radius: 20px;
+  padding: 1.25rem 1.25rem 1.15rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.2);
 }
 .hero-kicker {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #99f6e4;
   font-weight: 600;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
 }
 .hero-title {
-  font-size: 1.55rem;
+  font-size: 1.4rem;
   font-weight: 700;
+  margin: 0 0 0.3rem 0;
   letter-spacing: -0.03em;
-  margin: 0 0 0.35rem 0;
-  line-height: 1.3;
 }
 .hero-sub {
   color: #cbd5e1;
-  font-size: 0.92rem;
-  margin: 0 0 1rem 0;
-  line-height: 1.55;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.5;
 }
-.hero-grid {
+
+.case-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
-  gap: 0.75rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin: 0.85rem 0 1rem;
 }
-@media (max-width: 780px) {
-  .hero-grid { grid-template-columns: 1fr; }
-  .hero-title { font-size: 1.28rem; }
+@media (max-width: 820px) {
+  .case-grid { grid-template-columns: 1fr; }
 }
-.hero-pill {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 14px;
-  padding: 0.85rem 1rem;
-  backdrop-filter: blur(8px);
+.case-card {
+  background: #fff;
+  border: 1px solid rgba(15,23,42,0.07);
+  border-radius: 18px;
+  padding: 1.05rem 1.1rem 1rem;
+  box-shadow: 0 8px 22px rgba(15,23,42,0.05);
 }
-.hero-pill.primary {
-  background: rgba(45,212,191,0.16);
-  border-color: rgba(45,212,191,0.35);
-}
-.hero-pill-label {
-  font-size: 0.75rem;
-  color: #94a3b8;
+.case-card.simple { border-top: 4px solid #0f766e; }
+.case-card.delay { border-top: 4px solid #ea580c; }
+.case-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   margin-bottom: 0.2rem;
 }
-.hero-pill.primary .hero-pill-label { color: #99f6e4; }
-.hero-pill-value {
-  font-size: 1.35rem;
+.case-card.simple .case-label { color: #0f766e; }
+.case-card.delay .case-label { color: #ea580c; }
+.case-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.35rem 0;
+}
+.case-desc {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0 0 0.85rem 0;
+  line-height: 1.45;
+}
+.case-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.42rem 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.9rem;
+}
+.case-row:last-child { border-bottom: none; padding-bottom: 0; }
+.case-row .k { color: #64748b; }
+.case-row .v { color: #0f172a; font-weight: 600; white-space: nowrap; }
+.case-row.total {
+  margin-top: 0.35rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: none;
+}
+.case-row.total .k { color: #0f172a; font-weight: 700; }
+.case-row.total .v {
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
-.hero-pill.primary .hero-pill-value { font-size: 1.55rem; color: #ecfdf5; }
+.case-card.simple .case-row.total .v { color: #0f766e; }
+.case-card.delay .case-row.total .v { color: #c2410c; }
+.diff-note {
+  margin-top: 0.75rem;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  border-radius: 12px;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+.diff-note strong { font-weight: 700; }
 
 .rules {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0.25rem 0 1.1rem;
+  gap: 0.45rem;
+  margin: 0 0 0.9rem;
 }
 .rule-chip {
   background: #fff;
   border: 1px solid rgba(15,23,42,0.08);
   color: #334155;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  padding: 0.4rem 0.7rem;
+  padding: 0.35rem 0.65rem;
   border-radius: 999px;
-  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
 }
-.rule-chip strong { color: #0f766e; font-weight: 700; }
+.rule-chip strong { color: #0f766e; }
 
 .section-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem;
-  margin: 0.4rem 0 0.75rem;
+  margin: 0.2rem 0 0.65rem;
 }
 .section-head h3 {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 700;
   color: #0f172a;
 }
-.section-head span {
-  color: #64748b;
-  font-size: 0.82rem;
-}
+.section-head span { color: #64748b; font-size: 0.8rem; }
 
 .panel {
   background: #fff;
   border: 1px solid rgba(15,23,42,0.06);
-  border-radius: 18px;
-  padding: 0.85rem 1rem 0.4rem;
-  box-shadow: 0 8px 24px rgba(15,23,42,0.05);
-  margin-bottom: 0.85rem;
+  border-radius: 16px;
+  padding: 0.55rem 0.7rem 0.2rem;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+  margin-bottom: 0.7rem;
 }
 
-.stTabs [data-baseweb="tab-list"] {
-  gap: 0.35rem;
-  background: transparent;
-}
+.stTabs [data-baseweb="tab-list"] { gap: 0.3rem; }
 .stTabs [data-baseweb="tab"] {
   background: #fff;
   border-radius: 999px !important;
-  padding: 0.45rem 0.95rem;
+  padding: 0.4rem 0.85rem;
   border: 1px solid rgba(15,23,42,0.08);
   color: #475569;
   font-weight: 600;
@@ -232,6 +224,17 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
   background: #0f766e !important;
   color: #fff !important;
   border-color: #0f766e !important;
+}
+
+.lock-badge {
+  display: inline-block;
+  background: rgba(148,163,184,0.18);
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  margin-left: 0.35rem;
 }
 </style>
         """,
@@ -243,16 +246,26 @@ def yen(n) -> str:
     return f"{int(round(n)):,} 円"
 
 
-def apply_chart_theme(fig: go.Figure, title: str = "") -> go.Figure:
-    fig.update_layout(**PLOTLY_LAYOUT, title=dict(text=title, font=dict(size=15, color=C_NAVY)) if title else None)
-    fig.update_xaxes(gridcolor="rgba(15,23,42,0.06)", zeroline=False)
-    fig.update_yaxes(gridcolor="rgba(15,23,42,0.06)", zeroline=False, tickformat=",")
+def theme_chart(fig: go.Figure, title: str = "") -> go.Figure:
+    fig.update_layout(
+        **PLOTLY_LAYOUT,
+        title=dict(text=title, font=dict(size=14, color=C_NAVY)) if title else None,
+    )
+    fig.update_xaxes(gridcolor="rgba(15,23,42,0.05)", zeroline=False, showgrid=False)
+    fig.update_yaxes(gridcolor="rgba(15,23,42,0.07)", zeroline=False, tickformat=",")
     return fig
+
+
+def get_edit_password() -> str:
+    try:
+        return str(st.secrets.get("EDIT_PASSWORD", "kashitsuke2026"))
+    except Exception:
+        return "kashitsuke2026"
 
 
 inject_styles()
 
-# --- 1. 固定データ（返済予定表） ---
+# --- 固定スケジュール ---
 schedule_data = [
     (datetime.date(2024, 6, 30), 1000000), (datetime.date(2024, 7, 31), 400000),
     (datetime.date(2024, 8, 31), 400000),  (datetime.date(2024, 9, 30), 400000),
@@ -269,7 +282,6 @@ schedule_dict = {dt + datetime.timedelta(days=1): amt for dt, amt in schedule_da
 month_ends = [dt for dt, amt in schedule_data]
 initial_principal = sum(amt for dt, amt in schedule_data)
 
-# --- 2. 保存ファイル ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CSV_FILE = os.path.join(BASE_DIR, "payments.csv")
 CONFIG_FILE = os.path.join(BASE_DIR, "config.json")
@@ -307,37 +319,60 @@ if os.path.exists(CONFIG_FILE):
 else:
     default_end_date = datetime.date.today()
 
-# --- 3. サイドバー ---
+# --- サイドバー（閲覧 / 編集） ---
+if "editor_unlocked" not in st.session_state:
+    st.session_state.editor_unlocked = False
+
 st.sidebar.markdown("### 計算条件")
-st.sidebar.caption("基準日と入金履歴を更新すると、残高が一括で再計算されます。")
-end_date = st.sidebar.date_input("計算基準日（一括精算日）", default_end_date)
+end_date = st.sidebar.date_input("計算基準日", default_end_date)
 
 st.sidebar.markdown("#### 入金履歴")
-st.sidebar.caption("行追加・編集のあと、必ず保存してください。")
-df_payments_input = st.sidebar.data_editor(
-    df_base,
-    num_rows="dynamic",
-    column_config={
-        "入金日": st.column_config.DateColumn("入金日", required=True),
-        "入金額(円)": st.column_config.NumberColumn("入金額(円)", min_value=0, required=True, format="%d"),
-    },
-    key="payment_editor",
-    use_container_width=True,
-)
+can_edit = st.session_state.editor_unlocked
 
-if st.sidebar.button("変更を保存する", type="primary", use_container_width=True):
-    df_to_save = df_payments_input.copy()
-    df_to_save["入金日"] = df_to_save["入金日"].apply(lambda x: x.strftime("%Y-%m-%d") if hasattr(x, "strftime") else x)
-    df_to_save.to_csv(CSV_FILE, index=False, encoding="utf-8_sig")
-    with open(CONFIG_FILE, "w", encoding="utf-8") as f:
-        json.dump({"end_date": end_date.strftime("%Y-%m-%d")}, f, ensure_ascii=False, indent=4)
-    st.sidebar.success("保存しました")
-    st.rerun()
+if not can_edit:
+    st.sidebar.caption("閲覧専用です。編集は管理者のみ。")
+    view_df = df_base.copy()
+    view_df["入金額(円)"] = view_df["入金額(円)"].map(lambda x: f"{int(x):,}")
+    st.sidebar.dataframe(view_df, hide_index=True, use_container_width=True, height=280)
+    st.sidebar.markdown("---")
+    with st.sidebar.expander("管理者ログイン（編集用）"):
+        pwd = st.text_input("パスワード", type="password", key="edit_pwd")
+        if st.button("編集を解除する", use_container_width=True):
+            if pwd == get_edit_password():
+                st.session_state.editor_unlocked = True
+                st.rerun()
+            else:
+                st.error("パスワードが違います")
+    df_payments_input = df_base.copy()
+else:
+    st.sidebar.caption("編集モード中。変更後に保存してください。")
+    if st.sidebar.button("編集モードを終了", use_container_width=True):
+        st.session_state.editor_unlocked = False
+        st.rerun()
+    df_payments_input = st.sidebar.data_editor(
+        df_base,
+        num_rows="dynamic",
+        column_config={
+            "入金日": st.column_config.DateColumn("入金日", required=True),
+            "入金額(円)": st.column_config.NumberColumn("入金額(円)", min_value=0, required=True, format="%d"),
+        },
+        key="payment_editor",
+        use_container_width=True,
+    )
+    if st.sidebar.button("変更を保存する", type="primary", use_container_width=True):
+        df_to_save = df_payments_input.copy()
+        df_to_save["入金日"] = df_to_save["入金日"].apply(
+            lambda x: x.strftime("%Y-%m-%d") if hasattr(x, "strftime") else x
+        )
+        df_to_save.to_csv(CSV_FILE, index=False, encoding="utf-8_sig")
+        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+            json.dump({"end_date": end_date.strftime("%Y-%m-%d")}, f, ensure_ascii=False, indent=4)
+        st.sidebar.success("保存しました")
+        st.rerun()
 
 payments_dict = pd.Series(df_payments_input["入金額(円)"].values, index=df_payments_input["入金日"]).to_dict()
 
 
-# --- 4. コア計算 ---
 def run_simulation(target_end_date, pmts):
     current_principal = 0
     accumulated_damage = 0
@@ -348,14 +383,12 @@ def run_simulation(target_end_date, pmts):
     total_damage_generated = 0
     total_damage_paid = 0
     total_principal_paid = 0
-
     running_planned_principal = 0
     running_actual_payment = 0
 
     start_date = datetime.date(2024, 7, 1)
     current_date = start_date
     current_period_start = start_date
-
     history_logs = []
     daily_records = []
 
@@ -404,7 +437,6 @@ def run_simulation(target_end_date, pmts):
             history_logs.append(
                 {
                     "日付": current_date.strftime("%Y/%m/%d"),
-                    "期間": f"{current_period_start.strftime('%m/%d')}～{current_date.strftime('%m/%d')}",
                     "対象元本(円)": current_principal + allocated_principal_today,
                     "発生遅延金(円)": damage_added_today,
                     "入金額(円)": payment_today,
@@ -453,71 +485,70 @@ def run_simulation(target_end_date, pmts):
     df_daily,
 ) = run_simulation(end_date, payments_dict)
 
+simple_remaining = initial_principal - total_pmt
 settlement = final_principal + final_damage
-recovery_rate = (total_prc_paid / initial_principal) * 100 if initial_principal else 0
+case_gap = settlement - simple_remaining
 
-# --- 5. ヒーロー ---
+# --- ヘッダー ---
 st.markdown(
     f"""
 <div class="hero">
   <div class="hero-kicker">Kashitsuke Monitor</div>
   <h1 class="hero-title">金銭消費貸借 充当計算ダッシュボード</h1>
-  <p class="hero-sub">返済予定と入金実績から、遅延損害金・未払い残高・一括精算額を日割りで可視化します。</p>
-  <div class="hero-grid">
-    <div class="hero-pill primary">
-      <div class="hero-pill-label">いま必要な一括精算額（{end_date.strftime('%Y/%m/%d')}時点）</div>
-      <div class="hero-pill-value">{yen(settlement)}</div>
-    </div>
-    <div class="hero-pill">
-      <div class="hero-pill-label">未払い元本</div>
-      <div class="hero-pill-value">{yen(final_principal)}</div>
-    </div>
-    <div class="hero-pill">
-      <div class="hero-pill-label">未払い遅延損害金</div>
-      <div class="hero-pill-value">{yen(final_damage)}</div>
-    </div>
-  </div>
+  <p class="hero-sub">{end_date.strftime('%Y/%m/%d')} 時点｜単純計算と遅延損害金込みの精算額を並べて確認できます。</p>
 </div>
 <div class="rules">
   <div class="rule-chip">遅延損害金 <strong>年21.9%</strong></div>
   <div class="rule-chip">充当順位 <strong>遅延金 → 元本</strong></div>
   <div class="rule-chip">端数 <strong>区間ごと切捨て</strong></div>
-  <div class="rule-chip">うるう年は <strong>366日</strong></div>
 </div>
     """,
     unsafe_allow_html=True,
 )
 
-# --- 6. KPI ---
+# --- 2ケース比較 ---
 st.markdown(
     f"""
-<div class="section-head">
-  <h3>契約サマリー</h3>
-  <span>契約総額とこれまでの累積実績</span>
+<div class="case-grid">
+  <div class="case-card simple">
+    <div class="case-label">CASE A</div>
+    <h2 class="case-title">単純計算（遅延金なし）</h2>
+    <p class="case-desc">当初元本から、支払済み総額をそのまま差し引きます。</p>
+    <div class="case-row"><span class="k">① 当初元本</span><span class="v">{yen(initial_principal)}</span></div>
+    <div class="case-row"><span class="k">② 単純支払済み費用</span><span class="v">− {yen(total_pmt)}</span></div>
+    <div class="case-row total"><span class="k">③ 単純残額（①−②）</span><span class="v">{yen(simple_remaining)}</span></div>
+  </div>
+  <div class="case-card delay">
+    <div class="case-label">CASE B</div>
+    <h2 class="case-title">遅延損害金ケース（法定充当）</h2>
+    <p class="case-desc">日割りの遅延損害金を発生させ、入金を遅延金→元本の順に充当します。</p>
+    <div class="case-row"><span class="k">未払い元本</span><span class="v">{yen(final_principal)}</span></div>
+    <div class="case-row"><span class="k">未払い遅延損害金</span><span class="v">{yen(final_damage)}</span></div>
+    <div class="case-row"><span class="k">発生した遅延損害金（累計）</span><span class="v">{yen(total_dmg_gen)}</span></div>
+    <div class="case-row total"><span class="k">一括精算額</span><span class="v">{yen(settlement)}</span></div>
+  </div>
+</div>
+<div class="diff-note">
+  両ケースの差：<strong>{yen(case_gap)}</strong><br>
+  単純残額 {yen(simple_remaining)} に対し、遅延損害金込みだと {yen(settlement)} になります。
+  差は「遅延損害金の影響」です。
 </div>
     """,
     unsafe_allow_html=True,
 )
-c1, c2, c3, c4 = st.columns(4)
-c1.metric("当初元本", yen(initial_principal))
-c2.metric("入金総額", yen(total_pmt))
-c3.metric("発生した遅延損害金", yen(total_dmg_gen))
-c4.metric("元本回収率", f"{recovery_rate:.1f}%")
 
-# --- 7. タブ分析 ---
+# --- シンプルなグラフ（2タブ） ---
 st.markdown(
     """
 <div class="section-head">
-  <h3>詳細分析</h3>
-  <span>残高・充当・計画ギャップを確認</span>
+  <h3>推移グラフ</h3>
+  <span>必要最低限の2つ</span>
 </div>
     """,
     unsafe_allow_html=True,
 )
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs(
-    ["残高推移", "充当内訳", "予定と実績", "月次比較", "計算明細"]
-)
+tab1, tab2, tab3 = st.tabs(["残高の推移", "予定と実績", "計算明細"])
 
 with tab1:
     st.markdown('<div class="panel">', unsafe_allow_html=True)
@@ -528,9 +559,7 @@ with tab1:
             y=df_daily["未払い元本"],
             mode="lines",
             name="未払い元本",
-            line=dict(color=C_TEAL, width=3),
-            fill="tozeroy",
-            fillcolor="rgba(15,118,110,0.08)",
+            line=dict(color=C_TEAL, width=2.5),
         )
     )
     fig1.add_trace(
@@ -538,111 +567,47 @@ with tab1:
             x=df_daily["date"],
             y=df_daily["未払い遅延金"],
             mode="lines",
-            name="未払い遅延損害金",
-            line=dict(color=C_ORANGE, width=3),
+            name="未払い遅延金",
+            line=dict(color=C_ORANGE, width=2.5),
         )
     )
-    apply_chart_theme(fig1, "未払い残高の時系列推移")
-    fig1.update_layout(xaxis_title="", yaxis_title="金額（円）")
-    st.plotly_chart(fig1, use_container_width=True)
+    theme_chart(fig1, "未払い元本と遅延金")
+    fig1.update_layout(yaxis_title="円", xaxis_title="")
+    st.plotly_chart(fig1, use_container_width=True, config={"displayModeBar": False})
     st.markdown("</div>", unsafe_allow_html=True)
 
 with tab2:
-    left, right = st.columns(2)
-    with left:
-        st.markdown('<div class="panel">', unsafe_allow_html=True)
-        fig_pie = go.Figure(
-            data=[
-                go.Pie(
-                    labels=["元本へ充当", "遅延損害金へ充当"],
-                    values=[total_prc_paid, total_dmg_paid],
-                    hole=0.58,
-                    marker=dict(colors=[C_TEAL, C_ORANGE]),
-                    textinfo="label+percent",
-                )
-            ]
-        )
-        apply_chart_theme(fig_pie, "入金の使途内訳")
-        fig_pie.update_layout(showlegend=False, margin=dict(t=48, b=10, l=10, r=10))
-        st.plotly_chart(fig_pie, use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
-    with right:
-        st.markdown('<div class="panel">', unsafe_allow_html=True)
-        fig_gauge = go.Figure(
-            go.Indicator(
-                mode="gauge+number",
-                value=recovery_rate,
-                number={"suffix": "%", "font": {"size": 36}},
-                title={"text": "元本回収進捗", "font": {"size": 15}},
-                gauge={
-                    "axis": {"range": [0, 100]},
-                    "bar": {"color": C_TEAL},
-                    "bgcolor": "#f1f5f9",
-                    "borderwidth": 0,
-                    "steps": [
-                        {"range": [0, 50], "color": "#ffe4e6"},
-                        {"range": [50, 80], "color": "#ffedd5"},
-                        {"range": [80, 100], "color": "#ccfbf1"},
-                    ],
-                },
-            )
-        )
-        apply_chart_theme(fig_gauge)
-        fig_gauge.update_layout(margin=dict(t=40, b=10, l=20, r=20), height=320)
-        st.plotly_chart(fig_gauge, use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
-
-with tab3:
     st.markdown('<div class="panel">', unsafe_allow_html=True)
-    fig_gap = go.Figure()
-    fig_gap.add_trace(
+    fig2 = go.Figure()
+    fig2.add_trace(
         go.Scatter(
             x=df_daily["date"],
             y=df_daily["予定累積元本"],
             mode="lines",
-            name="契約上の予定累積",
-            line=dict(color=C_SLATE, width=2, dash="dash"),
+            name="予定累積",
+            line=dict(color=C_SLATE, width=2, dash="dot"),
         )
     )
-    fig_gap.add_trace(
+    fig2.add_trace(
         go.Scatter(
             x=df_daily["date"],
             y=df_daily["実績累積入金"],
             mode="lines",
-            name="実際の累積入金",
-            fill="tonexty",
-            fillcolor="rgba(190,18,60,0.08)",
-            line=dict(color=C_GREEN, width=3),
+            name="実績入金",
+            line=dict(color=C_GREEN, width=2.5),
         )
     )
-    apply_chart_theme(fig_gap, "予定と実績のギャップ（網掛け＝遅れ）")
-    fig_gap.update_layout(xaxis_title="", yaxis_title="金額（円）")
-    st.plotly_chart(fig_gap, use_container_width=True)
+    theme_chart(fig2, "予定累積 vs 実績入金")
+    fig2.update_layout(yaxis_title="円", xaxis_title="")
+    st.plotly_chart(fig2, use_container_width=True, config={"displayModeBar": False})
     st.markdown("</div>", unsafe_allow_html=True)
 
-with tab4:
-    st.markdown('<div class="panel">', unsafe_allow_html=True)
-    df_plot = df_daily.copy()
-    df_plot["年月"] = df_plot["date"].apply(lambda x: x.strftime("%Y/%m"))
-    df_monthly = df_plot.groupby("年月")[["発生遅延金", "入金額"]].sum().reset_index()
-    fig_monthly = go.Figure()
-    fig_monthly.add_trace(go.Bar(x=df_monthly["年月"], y=df_monthly["入金額"], name="入金額", marker_color=C_TEAL))
-    fig_monthly.add_trace(
-        go.Bar(x=df_monthly["年月"], y=df_monthly["発生遅延金"], name="発生遅延金", marker_color=C_ORANGE)
-    )
-    apply_chart_theme(fig_monthly, "月次：入金 vs 発生遅延金")
-    fig_monthly.update_layout(barmode="group", xaxis_title="", yaxis_title="金額（円）")
-    st.plotly_chart(fig_monthly, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with tab5:
-    st.caption("日割り充当計算の明細（イベント発生日のみ）")
+with tab3:
+    st.caption("イベント発生日のみ（入金・月末確定・基準日）")
     st.dataframe(
         df_history[
             [
                 "日付",
-                "対象元本(円)",
-                "発生遅延金(円)",
                 "入金額(円)",
                 "遅延金充当(円)",
                 "元本充当(円)",
