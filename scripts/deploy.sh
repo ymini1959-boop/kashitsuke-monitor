@@ -24,7 +24,7 @@ if ! "$GH" auth status >/dev/null 2>&1; then
 fi
 
 REPO_NAME="${1:-kashitsuke-monitor}"
-VISIBILITY="${2:-private}"
+VISIBILITY="${2:-public}"
 
 if git remote get-url origin >/dev/null 2>&1; then
   echo "既存の origin へ push します..."

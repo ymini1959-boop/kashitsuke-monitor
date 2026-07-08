@@ -28,4 +28,4 @@ Streamlit Community Cloud へのデプロイ手順は [docs/deploy.md](docs/depl
 
 ## 注意
 
-入金履歴・残高など財務データを含みます。公開範囲に注意してください（既定のデプロイは private リポジトリ）。
+入金履歴・残高など財務データを含みます。リポジトリと Streamlit アプリは **誰でも閲覧できる public** です。公開に問題がある場合は private に戻してください。

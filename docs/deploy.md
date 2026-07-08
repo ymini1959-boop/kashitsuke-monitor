@@ -16,6 +16,7 @@ cd ~/Desktop/貸付モニ
 
 初回はブラウザで GitHub ログイン（デバイス認証）が求められます。  
 push 完了後、表示される手順に従い [share.streamlit.io](https://share.streamlit.io) でアプリを作成してください。
+誰でも URL だけで閲覧できる public アプリになります（財務データ公開に注意）。
 
 リポジトリ名を変える場合:
 
@@ -23,10 +24,10 @@ push 完了後、表示される手順に従い [share.streamlit.io](https://sha
 ./scripts/deploy.sh kashitsuke-monitor
 ```
 
-公開リポジトリにしたい場合（財務データに注意）:
+private にしたい場合:
 
 ```bash
-./scripts/deploy.sh kashitsuke-monitor public
+./scripts/deploy.sh kashitsuke-monitor private
 ```
 
 ## 手動デプロイ
