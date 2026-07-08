@@ -77,13 +77,24 @@ div[data-testid="stMetric"] {
   background: #fff;
   border: 1px solid rgba(15,23,42,0.06);
   border-radius: 16px;
-  padding: 1rem 1.1rem 0.85rem;
+  padding: 0.95rem 0.95rem 0.8rem;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+  min-height: 104px;
 }
-div[data-testid="stMetric"] label { color: #64748b !important; font-weight: 500 !important; }
+div[data-testid="stMetric"] label {
+  color: #64748b !important;
+  font-weight: 500 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  line-height: 1.35 !important;
+}
 div[data-testid="stMetric"] [data-testid="stMetricValue"] {
   font-weight: 700 !important;
   letter-spacing: -0.02em;
+  font-size: 1.35rem !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  line-height: 1.25 !important;
 }
 
 .hero {
