@@ -690,15 +690,15 @@ st.markdown(
     <div class="case-row"><span class="k">① 当初元本</span><span class="v">{yen(initial_principal)}</span></div>
     <div class="case-row"><span class="k">② 単純支払済み費用</span><span class="v">− {yen(total_pmt)}</span></div>
     <div class="case-row"><span class="k">③ 累計遅延損害金（発生総額）</span><span class="v">{yen(total_dmg_gen)}</span></div>
-    <div class="case-row"><span class="k">④ 遅延損害金（残）<br><small style="color:#94a3b8;font-weight:400;">（③ − 遅延金へ充当済み {yen(total_dmg_paid)}）</small></span><span class="v">{yen(final_damage)}</span></div>
-    <div class="case-row"><span class="k">⑤ 未払い元本（残）<br><small style="color:#94a3b8;font-weight:400;">（① − 元本へ充当済み {yen(total_prc_paid)}／または ②の単純残額 + 遅延金充当分）</small></span><span class="v">{yen(final_principal)}</span></div>
+    <div class="case-row"><span class="k">④ 遅延損害金（残）<br><small>（発生総額 − すでに遅延金へ充当した分）<br>③ {yen(total_dmg_gen)} − {yen(total_dmg_paid)}</small></span><span class="v">{yen(final_damage)}</span></div>
+    <div class="case-row"><span class="k">⑤ 未払い元本（残）<br><small>（単純残額 + 遅延金に回った入金）<br>{yen(simple_remaining)} + {yen(total_dmg_paid)}</small></span><span class="v">{yen(final_principal)}</span></div>
     <div class="case-row total"><span class="k">⑥ 一括精算額（④＋⑤）</span><span class="v">{yen(settlement)}</span></div>
   </div>
 </div>
 <div class="diff-note">
-  両ケースの差：<strong>{yen(case_gap)}</strong><br>
-  単純残額 {yen(simple_remaining)} に対し、遅延損害金込みだと {yen(settlement)} です。<br>
-  ⑤が大きく見えるのは、入金の一部（{yen(total_dmg_paid)}）が遅延金に先に充当され、元本が減りきらないためです。
+  <strong>⑤が大きく見える理由</strong><br>
+  入金は先に遅延金へ回ります。遅延金に充てた {yen(total_dmg_paid)} は元本を減らせないため、<br>
+  ⑤ = Case Aの単純残額 {yen(simple_remaining)} ＋ 遅延金に回った分 {yen(total_dmg_paid)} になります。
 </div>
     """,
     unsafe_allow_html=True,
@@ -716,99 +716,123 @@ st.markdown(
 )
 
 tab1, tab2, tab3, tab4, tab5 = st.tabs(
-    ["残高", "予定と実績", "月次", "充当内訳", "明細"]
+    ["精算の比較", "⑤の内訳", "入金の行き先", "月次", "明細"]
 )
 
 with tab1:
-    chart_panel("未払い残高の推移", "元本残高と遅延損害金残高の時系列")
+    chart_panel("いま払うとすればいくらか", "Case A（単純）と Case B（遅延金込み）の比較")
     fig1 = go.Figure()
     fig1.add_trace(
-        go.Scatter(
-            x=df_daily["date"],
-            y=df_daily["未払い元本"],
-            mode="lines",
-            name="未払い元本",
-            line=dict(color=C_TEAL, width=2.5),
+        go.Bar(
+            name="単純残額（Case A）",
+            x=["Case A 単純計算"],
+            y=[simple_remaining],
+            marker_color=C_TEAL,
+            text=[yen(simple_remaining)],
+            textposition="outside",
         )
     )
     fig1.add_trace(
-        go.Scatter(
-            x=df_daily["date"],
-            y=df_daily["未払い遅延金"],
-            mode="lines",
-            name="未払い遅延金",
-            line=dict(color=C_ORANGE, width=2.5),
+        go.Bar(
+            name="未払い元本（⑤）",
+            x=["Case B 遅延金込み"],
+            y=[final_principal],
+            marker_color="#0ea5e9",
+            text=[yen(final_principal)],
+            textposition="inside",
+        )
+    )
+    fig1.add_trace(
+        go.Bar(
+            name="遅延金残（④）",
+            x=["Case B 遅延金込み"],
+            y=[final_damage],
+            marker_color=C_ORANGE,
+            text=[yen(final_damage)],
+            textposition="inside",
         )
     )
     theme_chart(fig1)
-    fig1.update_layout(yaxis_title="円", xaxis_title="")
+    fig1.update_layout(
+        barmode="stack",
+        yaxis_title="円",
+        xaxis_title="",
+        height=340,
+        margin=dict(l=8, r=8, t=8, b=56),
+        uniformtext_minsize=10,
+        uniformtext_mode="hide",
+    )
     st.plotly_chart(fig1, use_container_width=True, config={"displayModeBar": False})
+    st.caption(f"Case Bの合計（⑥）= {yen(settlement)}　／　Case Aとの差 = {yen(case_gap)}")
 
 with tab2:
-    chart_panel("予定累積 vs 実績入金", "点線が予定、実線が入金実績。差が返済の遅れ")
+    chart_panel(
+        "なぜ⑤は単純残額より大きい？",
+        "単純残額に、遅延金へ回った入金を足すと⑤になります",
+    )
     fig2 = go.Figure()
     fig2.add_trace(
-        go.Scatter(
-            x=df_daily["date"],
-            y=df_daily["予定累積元本"],
-            mode="lines",
-            name="予定累積",
-            line=dict(color=C_SLATE, width=2, dash="dot"),
-        )
-    )
-    fig2.add_trace(
-        go.Scatter(
-            x=df_daily["date"],
-            y=df_daily["実績累積入金"],
-            mode="lines",
-            name="実績入金",
-            line=dict(color=C_GREEN, width=2.5),
+        go.Bar(
+            x=["単純残額\n(Case A)", "＋ 遅延金に\n回った入金", "＝ ⑤未払い\n元本"],
+            y=[simple_remaining, total_dmg_paid, final_principal],
+            marker_color=[C_TEAL, C_ORANGE, "#0ea5e9"],
+            text=[yen(simple_remaining), yen(total_dmg_paid), yen(final_principal)],
+            textposition="outside",
         )
     )
     theme_chart(fig2)
-    fig2.update_layout(yaxis_title="円", xaxis_title="")
+    fig2.update_layout(
+        showlegend=False,
+        yaxis_title="円",
+        xaxis_title="",
+        height=340,
+        margin=dict(l=8, r=8, t=28, b=40),
+    )
     st.plotly_chart(fig2, use_container_width=True, config={"displayModeBar": False})
+    st.caption(
+        f"{yen(simple_remaining)} + {yen(total_dmg_paid)} = {yen(final_principal)}"
+    )
 
 with tab3:
-    chart_panel("月次：入金と発生遅延金", "各月に入った金額と、同月に発生した遅延損害金")
-    df_plot = df_daily.copy()
-    df_plot["年月"] = df_plot["date"].apply(lambda x: x.strftime("%Y/%m"))
-    df_monthly = df_plot.groupby("年月")[["発生遅延金", "入金額"]].sum().reset_index()
-    fig3 = go.Figure()
-    fig3.add_trace(go.Bar(x=df_monthly["年月"], y=df_monthly["入金額"], name="入金額", marker_color=C_TEAL))
-    fig3.add_trace(
-        go.Bar(x=df_monthly["年月"], y=df_monthly["発生遅延金"], name="発生遅延金", marker_color=C_ORANGE)
-    )
-    theme_chart(fig3)
-    fig3.update_layout(barmode="group", yaxis_title="円", xaxis_title="", height=320)
-    st.plotly_chart(fig3, use_container_width=True, config={"displayModeBar": False})
-
-with tab4:
-    chart_panel("入金の充当先", f"入金総額 {yen(total_pmt)} の内訳")
-    fig4 = go.Figure(
+    chart_panel("入金はどこへ行ったか", f"入金総額 {yen(total_pmt)} の内訳")
+    fig3 = go.Figure(
         data=[
             go.Pie(
                 labels=["元本へ充当", "遅延金へ充当"],
                 values=[total_prc_paid, total_dmg_paid],
                 hole=0.55,
                 marker=dict(colors=[C_TEAL, C_ORANGE]),
-                textinfo="label+percent",
+                textinfo="label+percent+value",
+                texttemplate="%{label}<br>%{value:,.0f}円<br>(%{percent})",
                 textfont=dict(size=12),
             )
         ]
     )
-    theme_chart(fig4)
-    fig4.update_layout(
-        showlegend=True,
-        legend=dict(orientation="h", y=-0.08, x=0.5, xanchor="center"),
-        margin=dict(l=8, r=8, t=8, b=48),
-        height=300,
+    theme_chart(fig3)
+    fig3.update_layout(
+        showlegend=False,
+        margin=dict(l=8, r=8, t=8, b=8),
+        height=320,
         title=dict(text=""),
     )
-    st.plotly_chart(fig4, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig3, use_container_width=True, config={"displayModeBar": False})
     col_a, col_b = st.columns(2)
     col_a.metric("元本へ充当", yen(total_prc_paid))
     col_b.metric("遅延金へ充当", yen(total_dmg_paid))
+
+with tab4:
+    chart_panel("月次：入金額と発生した遅延金", "青＝入金、オレンジ＝その月に新しく発生した遅延損害金")
+    df_plot = df_daily.copy()
+    df_plot["年月"] = df_plot["date"].apply(lambda x: x.strftime("%Y/%m"))
+    df_monthly = df_plot.groupby("年月")[["発生遅延金", "入金額"]].sum().reset_index()
+    fig4 = go.Figure()
+    fig4.add_trace(go.Bar(x=df_monthly["年月"], y=df_monthly["入金額"], name="入金額", marker_color=C_TEAL))
+    fig4.add_trace(
+        go.Bar(x=df_monthly["年月"], y=df_monthly["発生遅延金"], name="発生遅延金", marker_color=C_ORANGE)
+    )
+    theme_chart(fig4)
+    fig4.update_layout(barmode="group", yaxis_title="円", xaxis_title="", height=320)
+    st.plotly_chart(fig4, use_container_width=True, config={"displayModeBar": False})
 
 with tab5:
     st.caption("イベント発生日のみ（入金・月末確定・基準日）")
