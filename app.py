@@ -27,7 +27,7 @@ PLOTLY_LAYOUT = dict(
     hovermode="x unified",
     showlegend=True,
     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=12)),
-    height=320,
+    height=280,
 )
 
 
@@ -83,132 +83,162 @@ header[data-testid="stHeader"] { background: transparent !important; }
 [data-testid="stSidebar"] [data-testid="stCaption"] { color: #94a3b8 !important; font-size: 0.9rem !important; }
 [data-testid="stSidebar"] label { font-size: 0.95rem !important; }
 
+/* Streamlit既定のh1/h2巨大化を抑制 */
+.stMarkdown h1, .stMarkdown h2, .stMarkdown h3,
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3 {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  margin: 0 !important;
+  line-height: inherit !important;
+}
+
 .hero {
   background: linear-gradient(135deg, #0f172a 0%, #134e4a 55%, #0f766e 100%);
   color: #fff;
-  border-radius: 18px;
-  padding: 1.15rem 1.05rem 1.05rem;
-  margin-bottom: 0.85rem;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.2);
+  border-radius: 14px;
+  padding: 0.85rem 0.9rem 0.8rem;
+  margin-bottom: 0.7rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
 }
 .hero-kicker {
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
+  font-size: 0.65rem !important;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #99f6e4;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
+  color: #99f6e4 !important;
+  font-weight: 600 !important;
+  margin: 0 0 0.2rem 0 !important;
 }
 .hero-title {
-  font-size: 1.28rem;
-  font-weight: 700;
-  margin: 0 0 0.4rem 0;
-  letter-spacing: -0.02em;
-  line-height: 1.35;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 0.25rem 0 !important;
+  letter-spacing: -0.01em;
+  line-height: 1.4 !important;
+  color: #fff !important;
 }
 .hero-sub {
-  color: #cbd5e1;
-  font-size: 0.95rem;
-  margin: 0;
-  line-height: 1.55;
+  color: #cbd5e1 !important;
+  font-size: 0.78rem !important;
+  margin: 0 !important;
+  line-height: 1.45 !important;
+  font-weight: 400 !important;
 }
 
 .case-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
-  margin: 0.75rem 0 0.85rem;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0.65rem;
+  margin: 0.65rem 0 0.7rem;
+  width: 100%;
 }
 .case-card {
   background: #fff;
   border: 1px solid rgba(15,23,42,0.07);
-  border-radius: 16px;
-  padding: 1rem 1rem 0.95rem;
-  box-shadow: 0 8px 22px rgba(15,23,42,0.05);
+  border-radius: 14px;
+  padding: 0.85rem 0.9rem 0.8rem;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.05);
+  min-width: 0;
+  overflow: hidden;
 }
-.case-card.simple { border-top: 4px solid #0f766e; }
-.case-card.delay { border-top: 4px solid #ea580c; }
+.case-card.simple { border-top: 3px solid #0f766e; }
+.case-card.delay { border-top: 3px solid #ea580c; }
 .case-label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  margin-bottom: 0.25rem;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.15rem 0 !important;
 }
-.case-card.simple .case-label { color: #0f766e; }
-.case-card.delay .case-label { color: #ea580c; }
+.case-card.simple .case-label { color: #0f766e !important; }
+.case-card.delay .case-label { color: #ea580c !important; }
 .case-title {
-  font-size: 1.12rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 0.4rem 0;
-  line-height: 1.35;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0 0 0.25rem 0 !important;
+  line-height: 1.35 !important;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 .case-desc {
-  font-size: 0.92rem;
-  color: #64748b;
-  margin: 0 0 0.85rem 0;
-  line-height: 1.5;
+  font-size: 0.78rem !important;
+  color: #64748b !important;
+  margin: 0 0 0.65rem 0 !important;
+  line-height: 1.45 !important;
+  font-weight: 400 !important;
 }
 .case-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 0.6rem;
-  padding: 0.55rem 0;
+  gap: 0.5rem;
+  padding: 0.45rem 0;
   border-bottom: 1px solid #f1f5f9;
-  font-size: 0.98rem;
-  line-height: 1.4;
+  font-size: 0.88rem !important;
+  line-height: 1.35;
 }
 .case-row:last-child { border-bottom: none; padding-bottom: 0; }
-.case-row .k { color: #64748b; flex: 1; min-width: 0; }
+.case-row .k {
+  color: #64748b !important;
+  flex: 1;
+  min-width: 0;
+  font-size: 0.84rem !important;
+  font-weight: 400 !important;
+}
 .case-row .v {
-  color: #0f172a;
-  font-weight: 700;
+  color: #0f172a !important;
+  font-weight: 700 !important;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  font-size: 1.02rem;
+  font-size: 0.92rem !important;
+  flex-shrink: 0;
 }
 .case-row.total {
-  margin-top: 0.25rem;
-  padding-top: 0.75rem;
+  margin-top: 0.2rem;
+  padding-top: 0.6rem;
   border-top: 1px solid #e2e8f0;
   border-bottom: none;
   align-items: center;
 }
-.case-row.total .k { color: #0f172a; font-weight: 700; font-size: 1rem; }
-.case-row.total .v {
-  font-size: 1.45rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+.case-row.total .k {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
 }
-.case-card.simple .case-row.total .v { color: #0f766e; }
-.case-card.delay .case-row.total .v { color: #c2410c; }
+.case-row.total .v {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+}
+.case-card.simple .case-row.total .v { color: #0f766e !important; }
+.case-card.delay .case-row.total .v { color: #c2410c !important; }
 .diff-note {
-  margin-top: 0.15rem;
-  margin-bottom: 1rem;
+  margin-top: 0.1rem;
+  margin-bottom: 0.9rem;
   background: #fff7ed;
   border: 1px solid #fed7aa;
   color: #9a3412;
   border-radius: 12px;
-  padding: 0.85rem 0.95rem;
-  font-size: 0.95rem;
-  line-height: 1.55;
+  padding: 0.7rem 0.8rem;
+  font-size: 0.82rem !important;
+  line-height: 1.5 !important;
 }
-.diff-note strong { font-weight: 700; font-size: 1.05rem; }
+.diff-note strong { font-weight: 700; font-size: 0.92rem !important; }
 
 .rules {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 0 0 0.75rem;
+  gap: 0.35rem;
+  margin: 0 0 0.65rem;
 }
 .rule-chip {
   background: #fff;
   border: 1px solid rgba(15,23,42,0.08);
   color: #334155;
-  font-size: 0.82rem;
+  font-size: 0.72rem !important;
   font-weight: 500;
-  padding: 0.42rem 0.7rem;
+  padding: 0.32rem 0.55rem;
   border-radius: 999px;
   line-height: 1.3;
 }
@@ -218,39 +248,42 @@ header[data-testid="stHeader"] { background: transparent !important; }
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.15rem;
-  margin: 0.15rem 0 0.55rem;
+  gap: 0.1rem;
+  margin: 0.1rem 0 0.45rem;
 }
-.section-head h3 {
-  margin: 0;
-  font-size: 1.12rem;
-  font-weight: 700;
-  color: #0f172a;
+.section-head h3,
+.section-head .section-title {
+  margin: 0 !important;
+  font-size: 0.98rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  line-height: 1.35 !important;
 }
-.section-head span { color: #64748b; font-size: 0.88rem; }
+.section-head span { color: #64748b; font-size: 0.78rem !important; }
 
 .panel {
   background: #fff;
   border: 1px solid rgba(15,23,42,0.06);
-  border-radius: 16px;
-  padding: 0.45rem 0.45rem 0.15rem;
+  border-radius: 14px;
+  padding: 0.35rem 0.35rem 0.1rem;
   box-shadow: 0 6px 18px rgba(15,23,42,0.04);
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.65rem;
+  overflow: hidden;
 }
 
 .stTabs [data-baseweb="tab-list"] {
-  gap: 0.35rem;
+  gap: 0.3rem;
   flex-wrap: wrap;
 }
 .stTabs [data-baseweb="tab"] {
   background: #fff;
   border-radius: 999px !important;
-  padding: 0.55rem 0.95rem !important;
+  padding: 0.45rem 0.8rem !important;
   border: 1px solid rgba(15,23,42,0.08);
   color: #475569;
   font-weight: 600;
-  font-size: 0.95rem !important;
-  min-height: 44px;
+  font-size: 0.85rem !important;
+  min-height: 40px;
 }
 .stTabs [aria-selected="true"] {
   background: #0f766e !important;
@@ -258,28 +291,29 @@ header[data-testid="stHeader"] { background: transparent !important; }
   border-color: #0f766e !important;
 }
 
-/* スマホ向け：フォントと余白をさらに読みやすく */
-@media (max-width: 640px) {
-  .hero-title { font-size: 1.35rem; }
-  .hero-sub { font-size: 1rem; }
-  .case-title { font-size: 1.18rem; }
-  .case-desc { font-size: 0.98rem; }
-  .case-row { font-size: 1.02rem; padding: 0.62rem 0; }
-  .case-row .v { font-size: 1.08rem; }
-  .case-row.total .v { font-size: 1.55rem; }
-  .diff-note { font-size: 1rem; }
-  .rule-chip { font-size: 0.88rem; }
-  .section-head h3 { font-size: 1.18rem; }
-  .stTabs [data-baseweb="tab"] {
-    font-size: 1rem !important;
-    padding: 0.6rem 1rem !important;
+/* スマホ（iPhone幅）：縦積み・小さめタイトルを強制 */
+@media (max-width: 767px) {
+  .block-container {
+    padding-left: calc(0.7rem + var(--safe-left)) !important;
+    padding-right: calc(0.7rem + var(--safe-right)) !important;
   }
+  .hero { padding: 0.75rem 0.8rem 0.7rem; border-radius: 12px; }
+  .hero-title { font-size: 1.0rem !important; }
+  .hero-sub { font-size: 0.75rem !important; }
+  .case-grid { grid-template-columns: 1fr !important; }
+  .case-title { font-size: 0.92rem !important; }
+  .case-desc { font-size: 0.75rem !important; }
+  .case-row .v { font-size: 0.9rem !important; }
+  .case-row.total .v { font-size: 1.1rem !important; }
+  .js-plotly-plot, .plotly { max-width: 100% !important; }
 }
 
-/* タブレット以上は2カラム */
-@media (min-width: 820px) {
-  .block-container { max-width: 980px !important; }
-  .case-grid { grid-template-columns: 1fr 1fr; }
+/* 広い画面だけ2カラム */
+@media (min-width: 900px) {
+  .block-container { max-width: 920px !important; }
+  .case-grid { grid-template-columns: 1fr 1fr !important; }
+  .hero-title { font-size: 1.15rem !important; }
+  .case-title { font-size: 1.0rem !important; }
   .section-head {
     flex-direction: row;
     align-items: baseline;
@@ -544,8 +578,8 @@ st.markdown(
     f"""
 <div class="hero">
   <div class="hero-kicker">Kashitsuke Monitor</div>
-  <h1 class="hero-title">金銭消費貸借 充当計算ダッシュボード</h1>
-  <p class="hero-sub">{end_date.strftime('%Y/%m/%d')} 時点｜単純計算と遅延損害金込みの精算額を並べて確認できます。</p>
+  <div class="hero-title">貸付モニタ</div>
+  <p class="hero-sub">{end_date.strftime('%Y/%m/%d')}時点｜単純計算と遅延金込みを比較</p>
 </div>
 <div class="rules">
   <div class="rule-chip">遅延損害金 <strong>年21.9%</strong></div>
@@ -562,16 +596,16 @@ st.markdown(
 <div class="case-grid">
   <div class="case-card simple">
     <div class="case-label">CASE A</div>
-    <h2 class="case-title">単純計算（遅延金なし）</h2>
-    <p class="case-desc">当初元本から、支払済み総額をそのまま差し引きます。</p>
+    <div class="case-title">単純計算</div>
+    <p class="case-desc">元本から支払済みを差し引くだけ（遅延金なし）</p>
     <div class="case-row"><span class="k">① 当初元本</span><span class="v">{yen(initial_principal)}</span></div>
     <div class="case-row"><span class="k">② 単純支払済み費用</span><span class="v">− {yen(total_pmt)}</span></div>
     <div class="case-row total"><span class="k">③ 単純残額（①−②）</span><span class="v">{yen(simple_remaining)}</span></div>
   </div>
   <div class="case-card delay">
     <div class="case-label">CASE B</div>
-    <h2 class="case-title">遅延損害金ケース（法定充当）</h2>
-    <p class="case-desc">日割りの遅延損害金を発生させ、入金を遅延金→元本の順に充当します。</p>
+    <div class="case-title">遅延損害金込み</div>
+    <p class="case-desc">遅延金を日割り計上し、遅延金→元本の順に充当</p>
     <div class="case-row"><span class="k">未払い元本</span><span class="v">{yen(final_principal)}</span></div>
     <div class="case-row"><span class="k">未払い遅延損害金</span><span class="v">{yen(final_damage)}</span></div>
     <div class="case-row"><span class="k">発生した遅延損害金（累計）</span><span class="v">{yen(total_dmg_gen)}</span></div>
@@ -591,8 +625,8 @@ st.markdown(
 st.markdown(
     """
 <div class="section-head">
-  <h3>推移グラフ</h3>
-  <span>必要最低限の2つ</span>
+  <div class="section-title">推移グラフ</div>
+  <span>残高と予定／実績</span>
 </div>
     """,
     unsafe_allow_html=True,
