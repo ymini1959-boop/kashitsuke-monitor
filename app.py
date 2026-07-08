@@ -7,10 +7,10 @@ import plotly.graph_objects as go
 import streamlit as st
 
 st.set_page_config(
-    layout="wide",
+    layout="centered",
     page_title="貸付モニタ | 充当計算ダッシュボード",
     page_icon="💠",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 C_TEAL = "#0f766e"
@@ -22,11 +22,12 @@ C_GREEN = "#15803d"
 PLOTLY_LAYOUT = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
-    font=dict(family="Noto Sans JP, sans-serif", color=C_NAVY, size=13),
-    margin=dict(l=8, r=8, t=36, b=8),
+    font=dict(family="Noto Sans JP, -apple-system, sans-serif", color=C_NAVY, size=14),
+    margin=dict(l=4, r=4, t=40, b=4),
     hovermode="x unified",
     showlegend=True,
-    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
+    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=12)),
+    height=320,
 )
 
 
@@ -36,9 +37,18 @@ def inject_styles() -> None:
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
 
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
 html, body, [class*="css"] {
-  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 .stApp {
   background:
@@ -46,12 +56,17 @@ html, body, [class*="css"] {
     linear-gradient(180deg, #e2e8f0 0%, #eef2f6 140px, #eef2f6 100%) !important;
 }
 #MainMenu, footer { visibility: hidden !important; }
+header[data-testid="stHeader"] { background: transparent !important; }
+
 .block-container {
-  padding-top: 1rem !important;
-  padding-bottom: 2.2rem !important;
-  max-width: 1100px !important;
+  padding-top: calc(0.7rem + var(--safe-top)) !important;
+  padding-bottom: calc(2.4rem + var(--safe-bottom)) !important;
+  padding-left: calc(0.85rem + var(--safe-left)) !important;
+  padding-right: calc(0.85rem + var(--safe-right)) !important;
+  max-width: 720px !important;
 }
 
+/* サイドバー：タッチしやすいボタン */
 [data-testid="stSidebar"] {
   background: linear-gradient(180deg, #0f172a 0%, #134e4a 100%);
 }
@@ -62,163 +77,180 @@ html, body, [class*="css"] {
   border: none !important;
   font-weight: 700 !important;
   border-radius: 12px !important;
+  min-height: 48px !important;
+  font-size: 1rem !important;
 }
-[data-testid="stSidebar"] [data-testid="stCaption"] { color: #94a3b8 !important; }
+[data-testid="stSidebar"] [data-testid="stCaption"] { color: #94a3b8 !important; font-size: 0.9rem !important; }
+[data-testid="stSidebar"] label { font-size: 0.95rem !important; }
 
 .hero {
   background: linear-gradient(135deg, #0f172a 0%, #134e4a 55%, #0f766e 100%);
   color: #fff;
-  border-radius: 20px;
-  padding: 1.25rem 1.25rem 1.15rem;
-  margin-bottom: 1rem;
+  border-radius: 18px;
+  padding: 1.15rem 1.05rem 1.05rem;
+  margin-bottom: 0.85rem;
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.2);
 }
 .hero-kicker {
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #99f6e4;
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.3rem;
 }
 .hero-title {
-  font-size: 1.4rem;
+  font-size: 1.28rem;
   font-weight: 700;
-  margin: 0 0 0.3rem 0;
-  letter-spacing: -0.03em;
+  margin: 0 0 0.4rem 0;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
 }
 .hero-sub {
   color: #cbd5e1;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .case-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.85rem;
-  margin: 0.85rem 0 1rem;
-}
-@media (max-width: 820px) {
-  .case-grid { grid-template-columns: 1fr; }
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin: 0.75rem 0 0.85rem;
 }
 .case-card {
   background: #fff;
   border: 1px solid rgba(15,23,42,0.07);
-  border-radius: 18px;
-  padding: 1.05rem 1.1rem 1rem;
+  border-radius: 16px;
+  padding: 1rem 1rem 0.95rem;
   box-shadow: 0 8px 22px rgba(15,23,42,0.05);
 }
 .case-card.simple { border-top: 4px solid #0f766e; }
 .case-card.delay { border-top: 4px solid #ea580c; }
 .case-label {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.06em;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
 }
 .case-card.simple .case-label { color: #0f766e; }
 .case-card.delay .case-label { color: #ea580c; }
 .case-title {
-  font-size: 1.05rem;
+  font-size: 1.12rem;
   font-weight: 700;
   color: #0f172a;
-  margin: 0 0 0.35rem 0;
+  margin: 0 0 0.4rem 0;
+  line-height: 1.35;
 }
 .case-desc {
-  font-size: 0.82rem;
+  font-size: 0.92rem;
   color: #64748b;
   margin: 0 0 0.85rem 0;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 .case-row {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 0.75rem;
-  padding: 0.42rem 0;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.55rem 0;
   border-bottom: 1px solid #f1f5f9;
-  font-size: 0.9rem;
+  font-size: 0.98rem;
+  line-height: 1.4;
 }
 .case-row:last-child { border-bottom: none; padding-bottom: 0; }
-.case-row .k { color: #64748b; }
-.case-row .v { color: #0f172a; font-weight: 600; white-space: nowrap; }
+.case-row .k { color: #64748b; flex: 1; min-width: 0; }
+.case-row .v {
+  color: #0f172a;
+  font-weight: 700;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.02rem;
+}
 .case-row.total {
-  margin-top: 0.35rem;
-  padding-top: 0.7rem;
+  margin-top: 0.25rem;
+  padding-top: 0.75rem;
   border-top: 1px solid #e2e8f0;
   border-bottom: none;
+  align-items: center;
 }
-.case-row.total .k { color: #0f172a; font-weight: 700; }
+.case-row.total .k { color: #0f172a; font-weight: 700; font-size: 1rem; }
 .case-row.total .v {
-  font-size: 1.25rem;
+  font-size: 1.45rem;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 .case-card.simple .case-row.total .v { color: #0f766e; }
 .case-card.delay .case-row.total .v { color: #c2410c; }
 .diff-note {
-  margin-top: 0.75rem;
+  margin-top: 0.15rem;
+  margin-bottom: 1rem;
   background: #fff7ed;
   border: 1px solid #fed7aa;
   color: #9a3412;
   border-radius: 12px;
-  padding: 0.7rem 0.85rem;
-  font-size: 0.86rem;
-  line-height: 1.45;
+  padding: 0.85rem 0.95rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
 }
-.diff-note strong { font-weight: 700; }
+.diff-note strong { font-weight: 700; font-size: 1.05rem; }
 
 .rules {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  margin: 0 0 0.9rem;
+  gap: 0.4rem;
+  margin: 0 0 0.75rem;
 }
 .rule-chip {
   background: #fff;
   border: 1px solid rgba(15,23,42,0.08);
   color: #334155;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 500;
-  padding: 0.35rem 0.65rem;
+  padding: 0.42rem 0.7rem;
   border-radius: 999px;
+  line-height: 1.3;
 }
 .rule-chip strong { color: #0f766e; }
 
 .section-head {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin: 0.2rem 0 0.65rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  margin: 0.15rem 0 0.55rem;
 }
 .section-head h3 {
   margin: 0;
-  font-size: 1.02rem;
+  font-size: 1.12rem;
   font-weight: 700;
   color: #0f172a;
 }
-.section-head span { color: #64748b; font-size: 0.8rem; }
+.section-head span { color: #64748b; font-size: 0.88rem; }
 
 .panel {
   background: #fff;
   border: 1px solid rgba(15,23,42,0.06);
   border-radius: 16px;
-  padding: 0.55rem 0.7rem 0.2rem;
+  padding: 0.45rem 0.45rem 0.15rem;
   box-shadow: 0 6px 18px rgba(15,23,42,0.04);
   margin-bottom: 0.7rem;
 }
 
-.stTabs [data-baseweb="tab-list"] { gap: 0.3rem; }
+.stTabs [data-baseweb="tab-list"] {
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
 .stTabs [data-baseweb="tab"] {
   background: #fff;
   border-radius: 999px !important;
-  padding: 0.4rem 0.85rem;
+  padding: 0.55rem 0.95rem !important;
   border: 1px solid rgba(15,23,42,0.08);
   color: #475569;
   font-weight: 600;
+  font-size: 0.95rem !important;
+  min-height: 44px;
 }
 .stTabs [aria-selected="true"] {
   background: #0f766e !important;
@@ -226,15 +258,33 @@ html, body, [class*="css"] {
   border-color: #0f766e !important;
 }
 
-.lock-badge {
-  display: inline-block;
-  background: rgba(148,163,184,0.18);
-  color: #cbd5e1;
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
-  margin-left: 0.35rem;
+/* スマホ向け：フォントと余白をさらに読みやすく */
+@media (max-width: 640px) {
+  .hero-title { font-size: 1.35rem; }
+  .hero-sub { font-size: 1rem; }
+  .case-title { font-size: 1.18rem; }
+  .case-desc { font-size: 0.98rem; }
+  .case-row { font-size: 1.02rem; padding: 0.62rem 0; }
+  .case-row .v { font-size: 1.08rem; }
+  .case-row.total .v { font-size: 1.55rem; }
+  .diff-note { font-size: 1rem; }
+  .rule-chip { font-size: 0.88rem; }
+  .section-head h3 { font-size: 1.18rem; }
+  .stTabs [data-baseweb="tab"] {
+    font-size: 1rem !important;
+    padding: 0.6rem 1rem !important;
+  }
+}
+
+/* タブレット以上は2カラム */
+@media (min-width: 820px) {
+  .block-container { max-width: 980px !important; }
+  .case-grid { grid-template-columns: 1fr 1fr; }
+  .section-head {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
 }
 </style>
         """,
