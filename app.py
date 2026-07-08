@@ -195,6 +195,14 @@ header[data-testid="stHeader"] { background: transparent !important; }
   font-size: 0.84rem !important;
   font-weight: 400 !important;
 }
+.case-row .k small {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.72rem !important;
+  line-height: 1.35 !important;
+  color: #94a3b8 !important;
+  font-weight: 400 !important;
+}
 .case-row .v {
   color: #0f172a !important;
   font-weight: 700 !important;
@@ -682,15 +690,15 @@ st.markdown(
     <div class="case-row"><span class="k">① 当初元本</span><span class="v">{yen(initial_principal)}</span></div>
     <div class="case-row"><span class="k">② 単純支払済み費用</span><span class="v">− {yen(total_pmt)}</span></div>
     <div class="case-row"><span class="k">③ 累計遅延損害金（発生総額）</span><span class="v">{yen(total_dmg_gen)}</span></div>
-    <div class="case-row"><span class="k">④ 遅延損害金（残）</span><span class="v">{yen(final_damage)}</span></div>
-    <div class="case-row"><span class="k">⑤ 未払い元本（残）</span><span class="v">{yen(final_principal)}</span></div>
+    <div class="case-row"><span class="k">④ 遅延損害金（残）<br><small style="color:#94a3b8;font-weight:400;">（③ − 遅延金へ充当済み {yen(total_dmg_paid)}）</small></span><span class="v">{yen(final_damage)}</span></div>
+    <div class="case-row"><span class="k">⑤ 未払い元本（残）<br><small style="color:#94a3b8;font-weight:400;">（① − 元本へ充当済み {yen(total_prc_paid)}／または ②の単純残額 + 遅延金充当分）</small></span><span class="v">{yen(final_principal)}</span></div>
     <div class="case-row total"><span class="k">⑥ 一括精算額（④＋⑤）</span><span class="v">{yen(settlement)}</span></div>
   </div>
 </div>
 <div class="diff-note">
   両ケースの差：<strong>{yen(case_gap)}</strong><br>
   単純残額 {yen(simple_remaining)} に対し、遅延損害金込みだと {yen(settlement)} です。<br>
-  累計で発生した遅延損害金は {yen(total_dmg_gen)}、うち未払い残が {yen(final_damage)}、すでに充当済みが {yen(total_dmg_paid)} です。
+  ⑤が大きく見えるのは、入金の一部（{yen(total_dmg_paid)}）が遅延金に先に充当され、元本が減りきらないためです。
 </div>
     """,
     unsafe_allow_html=True,
